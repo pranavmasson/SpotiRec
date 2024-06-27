@@ -1,0 +1,6 @@
+connect spotify api for a user
+
+display top 10 tracks
+
+we can use features such as genre, tempo, key, mode, and energy to determine similarity. 
+You can fetch these details from the Spotify API and then use a similarity metric like cosine similarity.
