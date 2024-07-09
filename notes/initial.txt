@@ -4,3 +4,6 @@ display top 10 tracks
 
 we can use features such as genre, tempo, key, mode, and energy to determine similarity. 
 You can fetch these details from the Spotify API and then use a similarity metric like cosine similarity.
+
+take 10000 randomized songs from the genre, run them all in the model
+and recommend the top 5 songs that are the most similar
