@@ -1,15 +1,9 @@
 import spotipy
+import spotipy.util as util
+from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
-
-SPOTIPY_CLIENT_ID='80739f8423c94704885edf2f4db60bfc'
-SPOTIPY_CLIENT_SECRET='2b0b53ab4bea406e9f1bb06a58031ea4'
-SPOTIPY_REDIRECT_URI='http://127.0.0.1:5000/oauth/callback'
-
-scope = "user-library-read"
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-
-results = sp.current_user_saved_tracks()
-for idx, item in enumerate(results['items']):
-    track = item['track']
-    print(idx, track['artists'][0]['name'], " – ", track['name'])
+cid = 'cd61dc7b3c404b62aae79d5e3c1ef779'
+secret = '2cfe66a686d94dbf926656c3da834236'
+scope = "playlist-modify-public"
+token = util.prompt_for_user_token('USERNAME_TO_AUTHORIZE',scope,client_id=cid,client_secret=secret,redirect_uri='http://localhost:3000/spotirec')
+spotify = spotipy.Spotify(auth=token)  
