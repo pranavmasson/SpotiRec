@@ -3,6 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import os
 from dotenv import load_dotenv
+import spotipy.util as util
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -13,7 +14,7 @@ app.config['SESSION_COOKIE_NAME'] = 'spotify-auth-session'
 cid = os.getenv('cid')
 secret = os.getenv('secret')
 redirect_uri = "http://localhost:3000/spotirec"
-scope = "user-read-recently-played user-read-private"
+scope = "user-read-recently-played"
 
 sp_oauth = SpotifyOAuth(client_id=cid, client_secret=secret, redirect_uri=redirect_uri, scope=scope)
 
@@ -36,8 +37,10 @@ def spotirec():
             spotify = spotipy.Spotify(auth=token)
             session['token_info'] = token_info
 
-            tracks = spotify.current_user_recently_played(limit=50, after=None, before=None)
+            #tracks = spotify.current_user_recently_played(limit=50, after=None, before=None)
+            tracks = ""
             user_name = spotify.current_user()
+            user_name = user_name['display_name']
 
             return render_template('dashboard.html', user_name=user_name, tracks=tracks)
         else:
