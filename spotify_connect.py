@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -6,13 +7,15 @@ from flask import Flask, render_template, request, redirect, session, url_for
 import os
 
 
+load_dotenv()
+
 app = Flask(__name__)
 app.secret_key = 'some_secret_key'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-auth-session'
 
 
-cid = 'cd61dc7b3c404b62aae79d5e3c1ef779'
-secret = '2cfe66a686d94dbf926656c3da834236'
+cid = os.getenv('cid')
+secret = os.getenv('secret')
 redirect_uri = 'http://localhost:3000/spotirec'
 scope = "playlist-modify-public"
 
