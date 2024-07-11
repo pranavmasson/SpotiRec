@@ -1,57 +1,49 @@
-from dotenv import load_dotenv
+from flask import Flask, request, redirect, session, render_template, url_for
 import spotipy
-import spotipy.util as util
-from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
-from flask import Flask, render_template, request, redirect, session, url_for
 import os
+from dotenv import load_dotenv
 
-
-load_dotenv()
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
 app.secret_key = 'some_secret_key'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-auth-session'
 
-
 cid = os.getenv('cid')
 secret = os.getenv('secret')
-redirect_uri = 'http://localhost:3000/spotirec'
-scope = "playlist-modify-public"
+redirect_uri = "http://localhost:3000/spotirec"
+scope = "user-read-recently-played user-read-private"
 
+sp_oauth = SpotifyOAuth(client_id=cid, client_secret=secret, redirect_uri=redirect_uri, scope=scope)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
 @app.route('/login')
 def login():
-    auth_url = 'https://accounts.spotify.com/authorize'
-    response_type = 'code'
-    state = ''
-    show_dialog = 'true'
-
-    url = f'{auth_url}?response_type={response_type}&client_id={cid}&scope={scope}&redirect_uri={redirect_uri}&state={state}&show_dialog={show_dialog}'
-    return redirect(url)
-
+    auth_url = sp_oauth.get_authorize_url()
+    return redirect(auth_url)
 
 @app.route('/spotirec')
 def spotirec():
     code = request.args.get('code')
     if code:
-        token_info = util.prompt_for_user_token(
-            'USERNAME_TO_AUTHORIZE',
-            scope,
-            client_id=cid,
-            client_secret=secret,
-            redirect_uri=redirect_uri
-        )
-        spotify = spotipy.Spotify(auth=token_info['access_token'])
-        session['token_info'] = token_info
-        return render_template('success.html')
+        token_info = sp_oauth.get_access_token(code)
+        if token_info:
+            token = token_info['access_token']
+            spotify = spotipy.Spotify(auth=token)
+            session['token_info'] = token_info
+
+            tracks = spotify.current_user_recently_played(limit=50, after=None, before=None)
+            user_name = spotify.current_user()
+
+            return render_template('dashboard.html', user_name=user_name, tracks=tracks)
+        else:
+            return 'Failed to get the token'
     else:
         return 'Failed to get authentication code'
-    
+
 if __name__ == '__main__':
-    app.run(port=3000) 
+    app.run(port=3000)
