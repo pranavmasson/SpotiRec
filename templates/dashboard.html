@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Dashboard</title>
+    <style>
+        body {
+            background-color: #121212; /* Dark background color */
+            color: #ffffff; /* Light text color */
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: #1DB954; /* Spotify green */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #1e1e1e; /* Slightly lighter dark background for list items */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, {{ user_name }}!</h1>
+    <h2>Your Recently Played Songs:</h2>
+    <ul>
+        {% for item in tracks %}
+            <li>
+                {{ item['track']['name'] }} by {{ item['track']['artists'][0]['name'] }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
