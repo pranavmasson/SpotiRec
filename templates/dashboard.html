@@ -22,6 +22,21 @@
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #1DB954; /* Spotify green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1ed760;
         }
     </style>
 </head>
@@ -32,6 +47,10 @@
         {% for item in tracks %}
             <li>
                 {{ item['track']['name'] }} by {{ item['track']['artists'][0]['name'] }}
+                <form action="{{ url_for('recommend') }}" method="post">
+                    <input type="hidden" name="track_id" value="{{ item['track']['id'] }}">
+                    <button type="submit">Recommend Me</button>
+                </form>
             </li>
         {% endfor %}
     </ul>

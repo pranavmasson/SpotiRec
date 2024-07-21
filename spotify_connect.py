@@ -68,6 +68,17 @@ def spotirec():
 
     return render_template('dashboard.html', user_name=user_name, tracks=unique_tracks)
 
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    track_id = request.form['track_id']
+    # Placeholder for future functionality to fetch recommendations based on track_id
+    return render_template('recommendations.html', track_id=track_id)
+
+@app.route('/recommendations')
+def recommendations():
+    # This will display recommended songs (future functionality)
+    return 'Here will be the recommendations based on the track.'
+
 
 if __name__ == '__main__':
     app.run(port=3000)
