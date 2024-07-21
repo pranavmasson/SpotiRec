@@ -53,13 +53,21 @@ def spotirec():
     token_info = get_token()
     if not token_info:
         return redirect('/')
-
     sp = spotipy.Spotify(auth=token_info['access_token'])
     results = sp.current_user_recently_played()
     user_name = sp.current_user()['display_name']
-    tracks = results['items']
+    
+    # Extracting tracks and removing duplicates based on track ID
+    seen_ids = set()
+    unique_tracks = []
+    for item in results['items']:
+        track = item['track']
+        if track['id'] not in seen_ids:
+            seen_ids.add(track['id'])
+            unique_tracks.append(item)
 
-    return render_template('dashboard.html', user_name=user_name, tracks=tracks)
+    return render_template('dashboard.html', user_name=user_name, tracks=unique_tracks)
+
 
 if __name__ == '__main__':
     app.run(port=3000)
