@@ -21,6 +21,7 @@ scope = "user-read-recently-played"
 sp_oauth = SpotifyOAuth(client_id=cid, client_secret=secret, redirect_uri=redirect_uri, scope=scope)
 
 def get_token():
+    session.clear()
     token_info = session.get('token_info', None)
     if not token_info:
         return None
