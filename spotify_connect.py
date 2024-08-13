@@ -15,7 +15,7 @@ app.config['SESSION_COOKIE_NAME'] = 'spotify-auth-session'
 
 cid = os.getenv('cid')
 secret = os.getenv('secret')
-redirect_uri = "http://localhost:3000/spotirec"
+redirect_uri = "http://localhost:3000/callback"
 scope = "user-read-recently-played"
 
 sp_oauth = SpotifyOAuth(client_id=cid, client_secret=secret, redirect_uri=redirect_uri, scope=scope)
@@ -148,7 +148,7 @@ def recommend():
     track_info = sp.audio_analysis(track_id)
     print(track_info)
     # Placeholder for future functionality to fetch recommendations based on track_id
-    #return render_template('recommendations.html', track_id=track_id)
+    return render_template('recommendations.html', track_id=track_id)
 
 @app.route('/recommendations')
 def recommendations():
